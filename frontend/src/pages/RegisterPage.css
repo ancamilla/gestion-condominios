@@ -1,0 +1,76 @@
+/* Contenedor principal */
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f9f9f9; /* Fondo claro */
+    margin: 0;
+  }
+  
+  /* Tarjeta de registro */
+  .register-card {
+    background-color: #ffffff; /* Fondo blanco */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Sombra */
+    padding: 40px;
+    width: 400px;
+    text-align: center;
+  }
+  
+  /* Título */
+  .register-card h2 {
+    color: #333; /* Texto oscuro */
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+  
+  /* Grupos de formulario */
+  .form-group {
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  
+  /* Etiquetas */
+  .form-group label {
+    display: block;
+    color: #555; /* Texto medio oscuro */
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+  
+  /* Campos de entrada */
+  .form-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc; /* Borde gris claro */
+    border-radius: 4px; /* Bordes redondeados */
+    outline: none;
+    box-sizing: border-box;
+  }
+  
+  /* Botón */
+  .register-button {
+    background-color: #28a745; /* Verde corporativo */
+    color: #fff; /* Texto blanco */
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px; /* Bordes redondeados */
+    cursor: pointer;
+    width: 100%;
+  }
+  
+  .register-button:hover {
+    background-color: #218838; /* Verde más oscuro */
+  }
+  
+  /* Mensaje */
+  .register-message {
+    margin-top: 15px;
+    color: #dc3545; /* Rojo para mensajes de error */
+    font-size: 14px;
+  }
+  
