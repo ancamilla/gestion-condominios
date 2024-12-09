@@ -119,6 +119,7 @@ Despues de tener autenticarse y actualizar procedemos a crear la rama o branch e
 ```
 git checkout -b barra-navegacion
 ```
+deben recibir el mensaje "Switched to a new branch 'barra-navegacion'"
 #### Trabajamos en el codigo
 Despues para guardar y subir los cambios al proyecto ejecutamos:
 ```
