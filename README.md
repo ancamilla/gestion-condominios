@@ -136,3 +136,5 @@ Finalmente hacemos el push para enviar los datos al proyecto en github:
 git push origin barra-navegación
 ```
 (Después de "origin" va el nombre de la rama o branch sobre la cual estamos trabajando)
+
+#### Solo suban contenido al repositorio cuando tengan el modulo/funcionalidad o codigo revisado, sin errores y bien implementado.
