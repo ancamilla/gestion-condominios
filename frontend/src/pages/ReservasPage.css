@@ -1,0 +1,95 @@
+/* Contenedor principal */
+.reservas-container {
+    margin: 0 auto;
+    max-width: 800px;
+    padding: 20px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9; /* Fondo claro */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Sombra */
+  }
+  
+  /* Título principal */
+  .reservas-container h2 {
+    font-size: 24px;
+    color: #333; /* Texto oscuro */
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+  
+  /* Formulario */
+  form {
+    margin-bottom: 30px;
+  }
+  
+  form div {
+    margin-bottom: 15px;
+    text-align: left;
+  }
+  
+  form label {
+    display: block;
+    font-size: 14px;
+    color: #555; /* Texto medio oscuro */
+    margin-bottom: 5px;
+  }
+  
+  form input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc; /* Borde gris claro */
+    border-radius: 4px; /* Bordes redondeados */
+    outline: none;
+    box-sizing: border-box;
+  }
+  
+  form button {
+    background-color: #007bff; /* Azul corporativo */
+    color: #fff; /* Texto blanco */
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px; /* Bordes redondeados */
+    cursor: pointer;
+    width: 100%;
+  }
+  
+  form button:hover {
+    background-color: #0056b3; /* Azul más oscuro */
+  }
+  
+  /* Mensaje */
+  form p {
+    margin-top: 10px;
+    font-size: 14px;
+    color: red; /* Mensaje de error */
+  }
+  
+  /* Lista de reservas */
+  .reservas-container h3 {
+    font-size: 20px;
+    color: #333;
+    margin-top: 30px;
+  }
+  
+  .reservas-container ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .reservas-container ul li {
+    background-color: #fff; /* Fondo blanco */
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    border-radius: 4px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    text-align: left;
+  }
+  
+  .reservas-container ul li span {
+    font-weight: bold;
+    color: #007bff; /* Azul para resaltar */
+  }
+  
