@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
-
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 // Ruta para registrar un nuevo usuario
 router.post("/register", async (req, res) => {
   try {
@@ -26,6 +27,33 @@ router.post("/register", async (req, res) => {
     res.status(500).json({ message: "Error al registrar usuario", error });
   }
 });
+
+// Ruta para iniciar sesión
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const usuario = await User.findOne({ email });
+    if (!usuario) {
+      return res.status(400).json({ message: "Email o contraseña incorrectos" });
+    }
+
+    const contrasenaValida = await bcrypt.compare(password, usuario.password);
+    if (!contrasenaValida) {
+      return res.status(400).json({ message: "Email o contraseña incorrectos" });
+    }
+
+    // Creamos un token JWT
+    const token = jwt.sign({ _id: usuario._id, name: usuario.name }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
+    res.json({ token, usuario: { name: usuario.name, email: usuario.email } });
+  } catch (error) {
+    res.status(500).json({ message: "Error al iniciar sesión", error });
+  }
+});
+
 
 // Ruta para obtener todos los usuarios (solo para pruebas)
 router.get("/", async (req, res) => {
