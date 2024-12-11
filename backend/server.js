@@ -2,6 +2,7 @@
 const express = require("express");  // Framework web para Node.js
 const mongoose = require("mongoose");  // ORM de MongoDB para trabajar con la base de datos
 const cors = require("cors");  // Middleware para permitir solicitudes de diferentes dominios
+
 require("dotenv").config();  // Cargar variables de entorno desde el archivo .env
 
 // Inicializamos la aplicación Express
@@ -15,10 +16,13 @@ app.use(express.json());
 app.use(cors());
 // Importamos las rutas
 const userRoutes = require("./routes/userRoutes"); 
-
+const reservaRoutes = require("./routes/reservaRoutes");
+const espacioRoutes = require("./routes/espacioRoutes");
 // Usamos las rutas para la API de usuarios
 app.use("/api/users", userRoutes); //Esto significa que todas las rutas en userRoutes.js están disponibles bajo la URL base /api/users
 
+app.use("/api/espacios", espacioRoutes); // Usamos las rutas de espacios
+app.use("/api/reservas", reservaRoutes);  // Usamos las rutas de reservas
 // Conectamos a MongoDB utilizando la URI de conexión definida en el archivo .env
 mongoose.connect(process.env.MONGO_URI)  // Usamos la URI que está en el archivo .env
   .then(() => console.log("MongoDB conectado"))  // Si la conexión es exitosa, mostramos este mensaje
