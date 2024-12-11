@@ -1,95 +1,280 @@
 /* Contenedor principal */
 .reservas-container {
-    margin: 0 auto;
-    max-width: 800px;
-    padding: 20px;
-    text-align: center;
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9; /* Fondo claro */
-    border-radius: 8px; /* Bordes redondeados */
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Sombra */
-  }
-  
-  /* Título principal */
-  .reservas-container h2 {
-    font-size: 24px;
-    color: #333; /* Texto oscuro */
-    margin-bottom: 20px;
-    font-weight: bold;
-  }
-  
-  /* Formulario */
-  form {
-    margin-bottom: 30px;
-  }
-  
-  form div {
-    margin-bottom: 15px;
-    text-align: left;
-  }
-  
-  form label {
-    display: block;
-    font-size: 14px;
-    color: #555; /* Texto medio oscuro */
-    margin-bottom: 5px;
-  }
-  
-  form input {
-    width: 100%;
-    padding: 10px;
-    font-size: 14px;
-    border: 1px solid #ccc; /* Borde gris claro */
-    border-radius: 4px; /* Bordes redondeados */
-    outline: none;
-    box-sizing: border-box;
-  }
-  
-  form button {
-    background-color: #007bff; /* Azul corporativo */
-    color: #fff; /* Texto blanco */
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 4px; /* Bordes redondeados */
-    cursor: pointer;
-    width: 100%;
-  }
-  
-  form button:hover {
-    background-color: #0056b3; /* Azul más oscuro */
-  }
-  
-  /* Mensaje */
-  form p {
-    margin-top: 10px;
-    font-size: 14px;
-    color: red; /* Mensaje de error */
-  }
-  
-  /* Lista de reservas */
-  .reservas-container h3 {
-    font-size: 20px;
-    color: #333;
-    margin-top: 30px;
-  }
-  
-  .reservas-container ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .reservas-container ul li {
-    background-color: #fff; /* Fondo blanco */
-    margin-bottom: 10px;
-    padding: 10px 15px;
-    border-radius: 4px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Sombra ligera */
-    text-align: left;
-  }
-  
-  .reservas-container ul li span {
-    font-weight: bold;
-    color: #007bff; /* Azul para resaltar */
-  }
-  
+  margin: 0 auto;
+  max-width: 800px;
+  padding: 20px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9; /* Fondo claro */
+  border-radius: 8px; /* Bordes redondeados */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Sombra */
+}
+
+/* Título principal */
+.reservas-container h2 {
+  font-size: 24px;
+  color: #333; /* Texto oscuro */
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+/* Aviso */
+.reservas-container p {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+/* Calendario */
+.calendario-container {
+  margin: 20px auto;
+}
+
+.react-calendar {
+  margin: 0 auto;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Sombra */
+  background-color: #fff; /* Fondo blanco */
+  padding: 10px;
+  border: 1px solid #ddd;
+  color: #333; /* Texto oscuro para días */
+}
+
+.react-calendar__tile {
+  color: #333; /* Texto oscuro por defecto */
+  font-size: 14px;
+  text-align: center;
+}
+
+.react-calendar__tile--active {
+  background-color: #007bff !important; /* Azul para el día seleccionado */
+  color: white !important; /* Texto blanco para contraste */
+  font-weight: bold;
+}
+
+.react-calendar__tile:hover {
+  background-color: #0056b3 !important; /* Azul más oscuro al pasar el cursor */
+  color: white !important;
+}
+
+.react-calendar__month-view__days__day--neighboringMonth {
+  color: #ccc; /* Días del mes anterior/siguiente */
+}
+
+/* Resaltar días reservados */
+.dia-reservado {
+  background-color: #ffcccc !important; /* Fondo rojo claro */
+  color: #b22222 !important; /* Texto rojo oscuro */
+  font-weight: bold;
+  border-radius: 50%;
+}
+
+/* Botones de navegación del calendario */
+.react-calendar__navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.react-calendar__navigation button {
+  background-color: #007bff; /* Azul corporativo */
+  color: white; /* Texto blanco */
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.react-calendar__navigation button:hover {
+  background-color: #0056b3; /* Azul más oscuro */
+  transform: scale(1.05); /* Efecto de hover */
+}
+
+.react-calendar__navigation button:active {
+  transform: scale(0.95); /* Efecto al hacer clic */
+}
+
+.react-calendar__navigation button:disabled {
+  background-color: #ccc; /* Fondo gris para botones deshabilitados */
+  color: #666; /* Texto gris */
+  cursor: not-allowed;
+}
+
+.react-calendar__navigation button[aria-label="Switch view to month"] {
+  background-color: transparent; /* Sin fondo */
+  color: #333; /* Texto oscuro */
+  font-weight: bold;
+  font-size: 16px;
+  cursor: default;
+  padding: 5px 0;
+  margin: 0 auto; /* Centrar el botón */
+  border: none;
+}
+
+.react-calendar__navigation button[aria-label="Switch view to month"]:hover {
+  background-color: transparent; /* Sin hover */
+  transform: none; /* Sin transformación */
+}
+
+/* Formulario */
+form {
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+form div {
+  margin-bottom: 15px;
+}
+
+form label {
+  display: block;
+  font-size: 14px;
+  color: #555; /* Texto medio oscuro */
+  margin-bottom: 5px;
+}
+
+form select,
+form input {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc; /* Borde gris claro */
+  border-radius: 4px; /* Bordes redondeados */
+  outline: none;
+  box-sizing: border-box;
+  background-color: white; /* Fondo blanco */
+  color: #333; /* Texto oscuro */
+}
+
+form select option {
+  color: #333; /* Texto oscuro */
+  background-color: white; /* Fondo blanco */
+}
+
+form button {
+  background-color: #007bff; /* Azul corporativo */
+  color: #fff; /* Texto blanco */
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 4px; /* Bordes redondeados */
+  cursor: pointer;
+  width: 100%;
+}
+
+form button:hover {
+  background-color: #0056b3; /* Azul más oscuro */
+}
+
+/* Mensaje */
+form p {
+  margin-top: 10px;
+  font-size: 14px;
+  color: red; /* Mensaje de error */
+}
+
+/* Lista de reservas */
+.reservas-container h3 {
+  font-size: 20px;
+  color: #333;
+  margin-top: 30px;
+}
+
+.detalle-reservas ul {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.detalle-reservas li {
+  background-color: #fff; /* Fondo blanco */
+  margin-bottom: 10px;
+  padding: 10px 15px;
+  border-radius: 4px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  text-align: left;
+}
+
+/* Resaltado */
+.detalle-reservas li span {
+  font-weight: bold;
+  color: #007bff; /* Azul para resaltar */
+}
+
+/* Pop-up overlay */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Pop-up container */
+.popup {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  width: 300px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Botones del pop-up */
+.btn-continuar {
+  background-color: #ff4444; /* Rojo */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.btn-cancelar {
+  background-color: #ccc;
+  color: black;
+  border: none;
+  padding: 10px 20px;
+  margin: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.btn-continuar:hover {
+  background-color: #cc0000;
+}
+
+.btn-cancelar:hover {
+  background-color: #bbb;
+}
+
+/* Botones generales */
+button {
+  background-color: #007bff; /* Azul corporativo */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+  background-color: #0056b3; /* Azul más oscuro */
+  transform: scale(1.05); /* Efecto de zoom */
+}
+
+button:active {
+  transform: scale(0.95); /* Efecto al hacer clic */
+}

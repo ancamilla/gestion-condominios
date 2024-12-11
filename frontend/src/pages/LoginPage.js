@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; // Importar hook useNavigate
 import "./LoginPage.css"; // Importamos los estilos
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const navigate = useNavigate(); // Inicializar useNavigate
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -14,7 +16,12 @@ const LoginPage = () => {
         email,
         password,
       });
-      setMessage(`Bienvenido: ${response.data.name}`);
+
+      // Guardar el token en localStorage
+      localStorage.setItem("token", response.data.token);
+      //setMessage(`Bienvenido: ${response.data.name}`);
+      // Redirigir a /reservas (para realizar pruebas/depurar)
+      navigate("/reservas"); 
     } catch (error) {
       setMessage("Error: Usuario o contraseña incorrectos");
     }

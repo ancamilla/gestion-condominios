@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 // Esquema para las reservas de espacios
 const ReservaSchema = new mongoose.Schema({
-  espacio: { type: String, required: true }, // Espacio reservado (ejemplo: "piscina")
+  espacio: { type: mongoose.Schema.Types.ObjectId, ref: "Espacio", required: true }, // Referencia al modelo de espacio (ejemplo: "piscina")
   usuario: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Usuario que realiza la reserva
   fecha: { type: Date, required: true }, // Fecha y hora de la reserva
   pagoInicial: { type: Boolean, default: false }, // Indicador de pago inicial
