@@ -1,7 +1,63 @@
 const express = require("express");
 const router = express.Router();
 const Reserva = require("../models/Reserva");
-const { verificarUsuario } = require("../middlewares/auth"); // Middleware de autenticación
+const { verificarUsuario, verificarRol } = require("../middlewares/auth"); // Middleware de autenticación
+
+// Ruta para obtener todas las reservas (solo para administradores)
+router.get("/admin", verificarUsuario, verificarRol(["administrador"]), async (req, res) => {
+  try {
+    const reservas = await Reserva.find()
+      .populate("usuario", "name")
+      .populate("espacio", "nombre") // Poblar el nombre del espacio
+      .sort({ fecha: 1 });
+    res.json(reservas);
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener todas las reservas", error });
+  }
+});
+
+// Ruta para actualizar el estado de una reserva (solo administradores)
+router.put("/admin/:id", verificarUsuario, verificarRol(["administrador"]), async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { estado } = req.body;
+
+    if (!estado) {
+      return res.status(400).json({ message: "El estado es obligatorio" });
+    }
+
+    const reservaActualizada = await Reserva.findByIdAndUpdate(
+      id,
+      { estado },
+      { new: true }
+    ).populate("usuario", "name");
+
+    if (!reservaActualizada) {
+      return res.status(404).json({ message: "Reserva no encontrada" });
+    }
+
+    res.json({ message: "Estado de la reserva actualizado", reserva: reservaActualizada });
+  } catch (error) {
+    res.status(500).json({ message: "Error al actualizar la reserva", error });
+  }
+});
+
+// Ruta para eliminar una reserva (solo administradores)
+router.delete("/admin/:id", verificarUsuario, verificarRol(["administrador"]), async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const reservaEliminada = await Reserva.findByIdAndDelete(id);
+
+    if (!reservaEliminada) {
+      return res.status(404).json({ message: "Reserva no encontrada" });
+    }
+
+    res.json({ message: "Reserva eliminada exitosamente" });
+  } catch (error) {
+    res.status(500).json({ message: "Error al eliminar la reserva", error });
+  }
+});
 
 // Ruta para listar reservas de un espacio seleccionado
 router.get("/", async (req, res) => {
