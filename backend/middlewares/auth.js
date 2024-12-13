@@ -16,5 +16,13 @@ const verificarUsuario = (req, res, next) => {
     res.status(401).json({ message: "Token inválido o expirado" });
   }
 };
-
-module.exports = { verificarUsuario };
+// Middleware para verificar roles específicos
+const verificarRol = (rolesPermitidos) => {
+  return (req, res, next) => {
+    if (!rolesPermitidos.includes(req.usuario.role)) {
+      return res.status(403).json({ message: "Acceso denegado. Permiso insuficiente." });
+    }
+    next();
+  };
+};
+module.exports = { verificarUsuario, verificarRol };
