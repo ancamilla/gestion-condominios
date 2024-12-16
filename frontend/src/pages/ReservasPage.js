@@ -6,26 +6,29 @@ import TopBar from "./TopBar";
 import "./ReservasPage.css";
 
 const ReservasPage = () => {
-  const [user, setUser] = useState(null); // Usuario autenticado
-  const [vista, setVista] = useState("reservar"); // Controla la vista actual: "reservar" o "historial"
-  const [espacios, setEspacios] = useState([]); // Lista de espacios comunes
-  const [espacioSeleccionado, setEspacioSeleccionado] = useState(""); // Espacio actualmente seleccionado
-  const [reservas, setReservas] = useState([]); // Reservas del espacio seleccionado
-  const [reservasFuturas, setReservasFuturas] = useState([]); // Futuras reservas del espacio seleccionado
-  const [historial, setHistorial] = useState([]); // Historial de reservas del usuario autenticado
-  const [fechaSeleccionada, setFechaSeleccionada] = useState(new Date()); // Fecha seleccionada en el calendario
-  const [restricciones, setRestricciones] = useState({ inicio: "06:00", fin: "20:00" }); // Horarios permitidos para reservas
-  const [horaInicio, setHoraInicio] = useState(""); // Hora de inicio seleccionada
-  const [showPopup, setShowPopup] = useState(false); // Controla la visibilidad del pop-up de confirmación
-  const [message, setMessage] = useState(""); // Mensaje informativo para el usuario
+  const [user, setUser] = useState(null);
+  const [vista, setVista] = useState("reservar");
+  const [espacios, setEspacios] = useState([]);
+  const [espacioSeleccionado, setEspacioSeleccionado] = useState("");
+  const [reservas, setReservas] = useState([]);
+  const [reservasFuturas, setReservasFuturas] = useState([]);
+  const [historial, setHistorial] = useState([]);
+  const [fechaSeleccionada, setFechaSeleccionada] = useState(new Date());
+  const [horaInicio, setHoraInicio] = useState("");
+  const [restricciones, setRestricciones] = useState({ inicio: "06:00", fin: "20:00" });
+  const [showPopup, setShowPopup] = useState(false);
+  const [showEliminarPopup, setShowEliminarPopup] = useState(false);
+  const [reservaAEliminar, setReservaAEliminar] = useState(null);
+  const [message, setMessage] = useState("");
+  const [errorPopup, setErrorPopup] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  // Cargar usuario y espacios en paralelo
   useEffect(() => {
     const fetchInitialData = async () => {
       const token = localStorage.getItem("token");
+      if (!token) return;
 
       try {
-        // Peticiones en paralelo
         const [userResponse, espaciosResponse] = await Promise.all([
           axios.get("http://localhost:5000/api/users/profile", {
             headers: { Authorization: `Bearer ${token}` },
@@ -35,7 +38,6 @@ const ReservasPage = () => {
 
         setUser(userResponse.data);
         setEspacios(espaciosResponse.data);
-
         if (espaciosResponse.data.length > 0) {
           setEspacioSeleccionado(espaciosResponse.data[0]._id);
         }
@@ -47,7 +49,6 @@ const ReservasPage = () => {
     fetchInitialData();
   }, []);
 
-  // Cargar restricciones y reservas del espacio seleccionado
   useEffect(() => {
     const fetchEspacioData = async () => {
       if (!espacioSeleccionado) return;
@@ -70,7 +71,6 @@ const ReservasPage = () => {
     fetchEspacioData();
   }, [espacioSeleccionado]);
 
-  // Cargar historial de reservas del usuario autenticado
   useEffect(() => {
     const fetchHistorial = async () => {
       const token = localStorage.getItem("token");
@@ -80,14 +80,13 @@ const ReservasPage = () => {
         });
         setHistorial(response.data);
       } catch (error) {
-        console.error("Error al cargar el historial de reservas:", error);
+        console.error("Error al cargar historial:", error);
       }
     };
 
     fetchHistorial();
   }, []);
 
-  // Crear nueva reserva
   const handleCrearReserva = async () => {
     try {
       if (!horaInicio) {
@@ -102,20 +101,39 @@ const ReservasPage = () => {
           espacio: espacioSeleccionado,
           fecha: `${fechaSeleccionada.toISOString().split("T")[0]}T${horaInicio}:00`,
         },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      setMessage("Reserva creada exitosamente");
-      setReservasFuturas([...reservasFuturas, response.data.reserva]); // Actualizar futuras reservas
-      setShowPopup(false); // Cerrar pop-up
+      setReservas([...reservas, response.data.reserva]);
+      setMessage("Reserva creada exitosamente.");
+      setShowPopup(false);
     } catch (error) {
-      setMessage("Error al crear la reserva.");
+      const errorMsg =
+        error.response?.data?.message || "Error al crear la reserva. Inténtalo nuevamente.";
+      setErrorMessage(errorMsg);
+      setErrorPopup(true);
     }
   };
 
-  // Resaltar días con reservas en el calendario
+  const confirmarEliminarReserva = (idReserva) => {
+    setReservaAEliminar(idReserva);
+    setShowEliminarPopup(true);
+  };
+
+  const handleEliminarReserva = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`http://localhost:5000/api/reservas/${reservaAEliminar}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setHistorial(historial.filter((reserva) => reserva._id !== reservaAEliminar));
+      setShowEliminarPopup(false);
+    } catch (error) {
+      console.error("Error al eliminar la reserva:", error);
+    }
+  };
+
   const resaltarDiasReservados = ({ date }) => {
     const fechasReservadas = reservas.map((reserva) =>
       new Date(reserva.fecha).toISOString().split("T")[0]
@@ -124,7 +142,6 @@ const ReservasPage = () => {
     return fechasReservadas.includes(fechaCalendario) ? "dia-reservado" : null;
   };
 
-  // Generar lista de horas permitidas según las restricciones
   const generarHoras = () => {
     const [inicioHora] = restricciones.inicio.split(":").map(Number);
     const [finHora] = restricciones.fin.split(":").map(Number);
@@ -136,7 +153,6 @@ const ReservasPage = () => {
     return horas;
   };
 
-  // Renderizado condicional basado en usuario
   if (!user) return null;
 
   return (
@@ -144,7 +160,6 @@ const ReservasPage = () => {
       <TopBar userName={user.name} role={user.role} />
 
       <h2>Gestión de Reservas</h2>
-
       <div className="nav-tabs">
         <button onClick={() => setVista("reservar")} className={vista === "reservar" ? "active-tab" : ""}>
           Realizar Reserva
@@ -184,27 +199,12 @@ const ReservasPage = () => {
 
           <button onClick={() => setShowPopup(true)}>Solicitar reserva</button>
 
-          {showPopup && (
-            <div className="popup-overlay">
-              <div className="popup">
-                <h3>Confirmación de Reserva</h3>
-                <p>Para confirmar la reserva es necesario pagar la mitad por adelantado.</p>
-                <button className="btn-continuar" onClick={handleCrearReserva}>
-                  Continuar
-                </button>
-                <button className="btn-cancelar" onClick={() => setShowPopup(false)}>
-                  Cancelar
-                </button>
-              </div>
-            </div>
-          )}
-
           <h3>Reservas del Espacio Seleccionado</h3>
           <ul>
             {reservas.map((reserva) => (
               <li key={reserva._id}>
                 Fecha: {new Date(reserva.fecha).toLocaleDateString()} - 
-                Hora: {new Date(reserva.fecha).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} - 
+                Hora Inicio: {new Date(reserva.fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - 
                 Usuario: {reserva.usuario?.name || "Sin usuario"}
               </li>
             ))}
@@ -217,22 +217,74 @@ const ReservasPage = () => {
           <h3>Historial de Reservas</h3>
           <h4>Pendientes</h4>
           <ul>
-            {historial.filter((reserva) => new Date(reserva.fecha) >= new Date()).map((reserva) => (
-              <li key={reserva._id}>
-                Fecha: {new Date(reserva.fecha).toLocaleDateString()} - 
-                Espacio: {reserva.espacio?.nombre || "No asignado"}
-              </li>
-            ))}
+            {historial
+              .filter((reserva) => new Date(reserva.fecha) >= new Date())
+              .map((reserva) => (
+                <li key={reserva._id}>
+                  Fecha: {new Date(reserva.fecha).toLocaleDateString()} - 
+                  Hora Inicio: {new Date(reserva.fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - 
+                  Espacio: {reserva.espacio?.nombre || "No asignado"}
+                  <span className="eliminar-reserva" onClick={() => confirmarEliminarReserva(reserva._id)}>
+                    Eliminar
+                  </span>
+                </li>
+              ))}
           </ul>
+
           <h4>Realizadas</h4>
           <ul>
-            {historial.filter((reserva) => new Date(reserva.fecha) < new Date()).map((reserva) => (
-              <li key={reserva._id}>
-                Fecha: {new Date(reserva.fecha).toLocaleDateString()} - 
-                Espacio: {reserva.espacio?.nombre || "No asignado"}
-              </li>
-            ))}
+            {historial
+              .filter((reserva) => new Date(reserva.fecha) < new Date())
+              .map((reserva) => (
+                <li key={reserva._id}>
+                  Fecha: {new Date(reserva.fecha).toLocaleDateString()} - 
+                  Hora Inicio: {new Date(reserva.fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - 
+                  Espacio: {reserva.espacio?.nombre || "No asignado"}
+                </li>
+              ))}
           </ul>
+        </div>
+      )}
+
+      {showPopup && (
+        <div className="popup-overlay">
+          <div className="popup">
+            <h3>Confirmación de Reserva</h3>
+            <p>Para confirmar la reserva es necesario pagar la mitad por adelantado.</p>
+            <button className="btn-continuar" onClick={handleCrearReserva}>
+              Confirmar
+            </button>
+            <button className="btn-cancelar" onClick={() => setShowPopup(false)}>
+              Cancelar
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showEliminarPopup && (
+        <div className="popup-overlay">
+          <div className="popup">
+            <h3>Confirmar Eliminación</h3>
+            <p>¿Estás seguro de que deseas eliminar esta reserva?</p>
+            <button className="btn-continuar" onClick={handleEliminarReserva}>
+              Eliminar
+            </button>
+            <button className="btn-cancelar" onClick={() => setShowEliminarPopup(false)}>
+              Cancelar
+            </button>
+          </div>
+        </div>
+      )}
+
+      {errorPopup && (
+        <div className="popup-overlay">
+          <div className="popup">
+            <h3>¡Error!</h3>
+            <p>{errorMessage}</p>
+            <button className="btn-cancelar" onClick={() => setErrorPopup(false)}>
+              Cerrar
+            </button>
+          </div>
         </div>
       )}
     </div>

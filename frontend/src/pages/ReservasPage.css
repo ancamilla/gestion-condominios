@@ -278,3 +278,13 @@ button:hover {
 button:active {
   transform: scale(0.95); /* Efecto al hacer clic */
 }
+.eliminar-reserva {
+  color: red;
+  cursor: pointer;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.eliminar-reserva:hover {
+  text-decoration: underline;
+}
