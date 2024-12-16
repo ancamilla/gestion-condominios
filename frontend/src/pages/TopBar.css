@@ -1,0 +1,56 @@
+/* Estilo principal de la barra */
+.top-bar {
+    display: flex;
+    justify-content: space-between; /* Divide en izquierda y derecha */
+    align-items: center;
+    padding: 10px 20px; /* Espaciado interior */
+    background-color: #007bff; /* Color de fondo */
+    color: white; /* Color del texto */
+    font-size: 16px;
+    position: fixed;
+    top: 0;
+    left: 0; /* Asegura inicio desde la izquierda */
+    width: 100vw; /* Cubre el ancho total de la ventana */
+    z-index: 1000;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box; /* Incluye padding en la altura total */
+  }
+  
+  /* Nombre de la aplicación */
+  .app-name {
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap; /* Evita que se rompa en varias líneas */
+    margin-right: 30px; /* Espaciado derecho */
+  }
+  
+  /* Opciones de navegación (a la izquierda) */
+  .nav-links {
+    display: flex;
+    gap: 20px; /* Espaciado entre las opciones */
+    flex-grow: 1; /* Expande para alinear todo a la izquierda */
+  }
+  
+  .nav-item {
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  .nav-item:hover {
+    text-decoration: underline;
+  }
+  
+  /* Cerrar sesión (a la derecha) */
+  .logout {
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .logout:hover {
+    text-decoration: underline;
+  }
+  

@@ -21,7 +21,7 @@ const LoginPage = () => {
       localStorage.setItem("token", response.data.token);
       //setMessage(`Bienvenido: ${response.data.name}`);
       // Redirigir a /reservas (para realizar pruebas/depurar)
-      navigate("/reservas"); 
+      navigate("/Dashboard"); 
     } catch (error) {
       setMessage("Error: Usuario o contraseña incorrectos");
     }

@@ -79,6 +79,18 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ message: "Error al iniciar sesión", error });
   }
 });
+// Ruta para obtener el perfil del usuario autenticado
+router.get("/profile", verificarUsuario, async (req, res) => {
+  try {
+    const usuario = await User.findById(req.usuario._id, "name email role");
+    if (!usuario) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+    res.json(usuario);
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener el perfil del usuario", error });
+  }
+});
 
 
 // Ruta para obtener todos los usuarios (solo para pruebas)
