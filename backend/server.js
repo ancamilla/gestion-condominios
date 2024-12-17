@@ -20,12 +20,15 @@ const reservaRoutes = require("./routes/reservaRoutes");
 const espacioRoutes = require("./routes/espacioRoutes");
 const pagoRoutes = require("./routes/pagoRoutes");
 const cuentaRoutes = require("./routes/cuentaRoutes");
+const documentRoutes = require("./routes/documentRoutes");
 // Usamos las rutas para la API de usuarios
 app.use("/api/users", userRoutes); //Esto significa que todas las rutas en userRoutes.js están disponibles bajo la URL base /api/users
 app.use("/api/pagos", pagoRoutes);
 app.use("/api/espacios", espacioRoutes); // Usamos las rutas de espacios
 app.use("/api/reservas", reservaRoutes);  // Usamos las rutas de reservas
 app.use("/api/cuentas", cuentaRoutes);
+app.use("/api/documentos", documentRoutes);
+app.use("/uploads", express.static("uploads")); // Servir archivos estáticos
 // Conectamos a MongoDB utilizando la URI de conexión definida en el archivo .env
 mongoose.connect(process.env.MONGO_URI)  // Usamos la URI que está en el archivo .env
   .then(() => console.log("MongoDB conectado"))  // Si la conexión es exitosa, mostramos este mensaje

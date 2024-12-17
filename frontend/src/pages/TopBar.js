@@ -4,8 +4,7 @@ import "./TopBar.css";
 
 const TopBar = ({ userName, role }) => {
   const navigate = useNavigate();
-  const [showGastosDropdown, setShowGastosDropdown] = useState(false);
-  const [showDocumentacionDropdown, setShowDocumentacionDropdown] = useState(false);
+  const [showDocMenu, setShowDocMenu] = useState(false); // Estado para manejar el menú desplegable de Documentación
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -19,54 +18,44 @@ const TopBar = ({ userName, role }) => {
         Gestión de Condominios
       </div>
 
-      {/* Navegación Principal */}
+      {/* Enlaces de navegación */}
       <div className="nav-links">
-        {/* Gastos Comunes con Dropdown */}
-        <div
-          className="nav-item dropdown"
-          onMouseEnter={() => setShowGastosDropdown(true)}
-          onMouseLeave={() => setShowGastosDropdown(false)}
-        >
-          <span>Gastos Comunes</span>
-          {showGastosDropdown && role === "administrador" && (
-            <div className="dropdown-menu">
-              <span onClick={() => navigate("/gastos-comunes/editar")}>Editar</span>
-            </div>
-          )}
-        </div>
-
-        {/* Reserva de espacios */}
+        <span className="nav-item" onClick={() => navigate("/gastos")}>
+          Gastos Comunes
+        </span>
         <span className="nav-item" onClick={() => navigate("/reservas")}>
           Reserva de espacios
         </span>
-
-        {/* Reclamos */}
         <span className="nav-item" onClick={() => navigate("/reclamos")}>
           Reclamos
         </span>
 
-        {/* Documentación con Dropdown */}
+        {/* Documentación */}
         <div
           className="nav-item dropdown"
-          onMouseEnter={() => setShowDocumentacionDropdown(true)}
-          onMouseLeave={() => setShowDocumentacionDropdown(false)}
+          onMouseEnter={() => role === "administrador" && setShowDocMenu(true)}
+          onMouseLeave={() => role === "administrador" && setShowDocMenu(false)}
+          onClick={() => {
+            if (role !== "administrador") navigate("/documentacion");
+          }}
         >
-          <span>Documentación</span>
-          {showDocumentacionDropdown && role === "administrador" && (
+          Documentación
+          {role === "administrador" && showDocMenu && (
             <div className="dropdown-menu">
+              <span onClick={() => navigate("/documentacion")}>Ver</span>
               <span onClick={() => navigate("/documentacion/editar")}>Editar</span>
             </div>
           )}
         </div>
 
-        {/* Ajustes */}
         <span className="nav-item" onClick={() => navigate("/ajustes")}>
           Ajustes
         </span>
       </div>
 
-      {/* Cerrar Sesión */}
+      {/* Sección de Logout */}
       <div className="logout">
+      
         <span onClick={handleLogout}>Cerrar Sesión</span>
       </div>
     </div>
