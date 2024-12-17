@@ -88,21 +88,47 @@ router.post("/", verificarUsuario, async (req, res) => {
       return res.status(400).json({ message: "Espacio y fecha son obligatorios" });
     }
 
+    // Convertir la fecha de inicio
+    const fechaInicio = new Date(fecha);
+
+    // Crear rangos de 8 horas antes y después de la fecha de inicio
+    const fechaInicioRango = new Date(fechaInicio);
+    fechaInicioRango.setHours(fechaInicio.getHours() - 8); // 8 horas antes
+
+    const fechaFinRango = new Date(fechaInicio);
+    fechaFinRango.setHours(fechaInicio.getHours() + 8); // 8 horas después
+
+    // Buscar solapamientos de reservas
+    const reservaExistente = await Reserva.findOne({
+      espacio,
+      fecha: { $gte: fechaInicioRango, $lt: fechaFinRango },
+    });
+
+    if (reservaExistente) {
+      return res.status(400).json({
+        message:
+          "No es posible realizar la reserva porque se solapa con otra reserva existente.",
+      });
+    }
+
+    // Crear la nueva reserva
     const nuevaReserva = new Reserva({
       espacio,
-      usuario: req.usuario._id, // Usuario autenticado
-      fecha,
+      usuario: req.usuario._id,
+      fecha: fechaInicio,
     });
 
     await nuevaReserva.save();
-
-    // Poblar el usuario antes de devolver la respuesta
-    const reservaConUsuario = await Reserva.findById(nuevaReserva._id).populate("usuario", "name");
-    res.status(201).json({ message: "Reserva creada exitosamente", reserva: reservaConUsuario });
+    res.status(201).json({ message: "Reserva creada exitosamente", reserva: nuevaReserva });
   } catch (error) {
+    console.error("Error al crear la reserva:", error);
     res.status(500).json({ message: "Error al crear la reserva", error });
   }
 });
+
+
+
+
 
 // Ruta para obtener el historial de reservas del usuario autenticado
 router.get("/historial", verificarUsuario, async (req, res) => {
@@ -120,6 +146,21 @@ router.get("/historial", verificarUsuario, async (req, res) => {
     res.json(reservas);
   } catch (error) {
     res.status(500).json({ message: "Error al obtener el historial de reservas", error });
+  }
+});
+// Ruta para eliminar una reserva
+router.delete("/:id", verificarUsuario, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const reservaEliminada = await Reserva.findByIdAndDelete(id);
+
+    if (!reservaEliminada) {
+      return res.status(404).json({ message: "Reserva no encontrada" });
+    }
+
+    res.json({ message: "Reserva eliminada exitosamente" });
+  } catch (error) {
+    res.status(500).json({ message: "Error al eliminar la reserva", error });
   }
 });
 
