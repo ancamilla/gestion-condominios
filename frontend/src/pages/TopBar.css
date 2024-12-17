@@ -37,6 +37,7 @@
     font-size: 16px;
     font-weight: bold;
     text-decoration: none;
+    position: relative;
   }
   
   .nav-item:hover {
@@ -53,4 +54,36 @@
   .logout:hover {
     text-decoration: underline;
   }
-  
+  /* Dropdown Menu */
+.dropdown-menu {
+  position: absolute;
+  top: 100%; /* Alineado justo debajo del nav-item */
+  left: 0;
+  background-color: #0056b3;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  width: 150px;
+}
+
+.dropdown-menu span {
+  display: block;
+  padding: 10px;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.dropdown-menu span:hover {
+  background-color: #003580; /* Azul más oscuro */
+}
+
+/* Cerrar Sesión */
+.logout {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.logout:hover {
+  color: #ff4444; /* Rojo */
+}
