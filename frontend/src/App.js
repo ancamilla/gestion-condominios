@@ -8,6 +8,8 @@ import ConfigurarPagoAdmin from "./pages/ConfigurarPagoAdmin";
 import HistorialPagos from "./pages/HistorialPagos";
 import ConfigurarGastosComunes from "./pages/configurarGastosComunes";
 import HistorialGastos from "./pages/HistorialGastos";
+import DocumentacionPage from "./pages/DocumentacionPage";
+import EditarDocumentacionPage from "./pages/EditarDocumentacionPage";
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
         <Route path="/admin/configurar-gastos" element={<ConfigurarGastosComunes />} />
         <Route path="/usuario/gastos-comunes" element={<HistorialGastos usuarioId="USER_ID_HERE" tipo="comunes" />} />
         <Route path="/usuario/adicionales" element={<HistorialGastos usuarioId="USER_ID_HERE" tipo="adicionales" />} />
+        <Route path="/documentacion" element={<DocumentacionPage />} />
+        <Route path="/documentacion/editar" element={<EditarDocumentacionPage />} />
       </Routes>
     </Router>
   );
