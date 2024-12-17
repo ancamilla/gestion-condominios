@@ -51,6 +51,12 @@ Detenemos el servidor con ctrl + c
 
 Si los dos servidores corren sin problemas se debería ver la aplicacion en http://localhost:3000
 
+Finalmente verificamos la instalación de las dependencias en el archivo package.json
+para esto vamos (en la terminal) al directorio raíz del proyecto  `gestion-condominios` y ejecutamos 
+```
+npm install
+```
+
 ---
 ### Conectar base de datos
 Para este proyecto se utilizará una base de datos no relacional como lo es MongoDB, para esto es necesario tener instalado el servidor MongoDB Community junto con MongoDB Compass
@@ -138,3 +144,9 @@ git push origin barra-navegación
 (Después de "origin" va el nombre de la rama o branch sobre la cual estamos trabajando)
 
 #### Solo suban contenido al repositorio cuando tengan el modulo/funcionalidad o codigo revisado, sin errores y bien implementado.
+
+Si por ejemplo estaban trabajando en una rama y se realizó una actualización de la rama principal, ejecutas
+```
+git merge main
+```
+`git merge main` fusiona los cambios de la rama main (u otra rama especificada) en tu rama actual. Esto se utiliza para integrar los últimos cambios de main en tu rama, especialmente útil si otros miembros del equipo han realizado actualizaciones en la rama principal.

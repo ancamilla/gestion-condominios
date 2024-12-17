@@ -142,6 +142,12 @@ router.post("/", verificarUsuario, async (req, res) => {
 });
 
 
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> main
 // Ruta para obtener el historial de reservas del usuario autenticado
 router.get("/historial", verificarUsuario, async (req, res) => {
   try {
@@ -158,6 +164,21 @@ router.get("/historial", verificarUsuario, async (req, res) => {
     res.json(reservas);
   } catch (error) {
     res.status(500).json({ message: "Error al obtener el historial de reservas", error });
+  }
+});
+// Ruta para eliminar una reserva
+router.delete("/:id", verificarUsuario, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const reservaEliminada = await Reserva.findByIdAndDelete(id);
+
+    if (!reservaEliminada) {
+      return res.status(404).json({ message: "Reserva no encontrada" });
+    }
+
+    res.json({ message: "Reserva eliminada exitosamente" });
+  } catch (error) {
+    res.status(500).json({ message: "Error al eliminar la reserva", error });
   }
 });
 
