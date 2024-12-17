@@ -41,6 +41,21 @@ router.put("/admin/:id", verificarUsuario, verificarRol(["administrador"]), asyn
     res.status(500).json({ message: "Error al actualizar la reserva", error });
   }
 });
+// Ruta para eliminar una reserva
+router.delete("/:id", verificarUsuario, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const reservaEliminada = await Reserva.findByIdAndDelete(id);
+
+    if (!reservaEliminada) {
+      return res.status(404).json({ message: "Reserva no encontrada" });
+    }
+
+    res.json({ message: "Reserva eliminada exitosamente" });
+  } catch (error) {
+    res.status(500).json({ message: "Error al eliminar la reserva", error });
+  }
+});
 
 // Ruta para eliminar una reserva (solo administradores)
 router.delete("/admin/:id", verificarUsuario, verificarRol(["administrador"]), async (req, res) => {
@@ -125,9 +140,6 @@ router.post("/", verificarUsuario, async (req, res) => {
     res.status(500).json({ message: "Error al crear la reserva", error });
   }
 });
-
-
-
 
 
 // Ruta para obtener el historial de reservas del usuario autenticado

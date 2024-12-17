@@ -22,7 +22,6 @@ const ReservasPage = () => {
   const [message, setMessage] = useState("");
   const [errorPopup, setErrorPopup] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-
   useEffect(() => {
     const fetchInitialData = async () => {
       const token = localStorage.getItem("token");
@@ -114,25 +113,33 @@ const ReservasPage = () => {
       setErrorPopup(true);
     }
   };
-
   const confirmarEliminarReserva = (idReserva) => {
     setReservaAEliminar(idReserva);
     setShowEliminarPopup(true);
   };
-
   const handleEliminarReserva = async () => {
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:5000/api/reservas/${reservaAEliminar}`, {
+      const response = await axios.delete(`http://localhost:5000/api/reservas/${reservaAEliminar}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
-      setHistorial(historial.filter((reserva) => reserva._id !== reservaAEliminar));
-      setShowEliminarPopup(false);
+  
+      if (response.status === 200) {
+        // Actualiza el historial y las reservas en el frontend
+        setHistorial(historial.filter((reserva) => reserva._id !== reservaAEliminar));
+        setReservas(reservas.filter((reserva) => reserva._id !== reservaAEliminar));
+        setShowEliminarPopup(false);
+        setMessage("Reserva eliminada exitosamente.");
+      }
     } catch (error) {
       console.error("Error al eliminar la reserva:", error);
+      setErrorMessage(
+        error.response?.data?.message || "Error al eliminar la reserva. Inténtalo nuevamente."
+      );
+      setErrorPopup(true);
     }
   };
+  
 
   const resaltarDiasReservados = ({ date }) => {
     const fechasReservadas = reservas.map((reserva) =>
@@ -245,7 +252,6 @@ const ReservasPage = () => {
           </ul>
         </div>
       )}
-
       {showPopup && (
         <div className="popup-overlay">
           <div className="popup">
@@ -260,7 +266,6 @@ const ReservasPage = () => {
           </div>
         </div>
       )}
-
       {showEliminarPopup && (
         <div className="popup-overlay">
           <div className="popup">
@@ -275,7 +280,6 @@ const ReservasPage = () => {
           </div>
         </div>
       )}
-
       {errorPopup && (
         <div className="popup-overlay">
           <div className="popup">
