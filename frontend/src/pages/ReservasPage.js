@@ -22,10 +22,6 @@ const ReservasPage = () => {
   const [message, setMessage] = useState("");
   const [errorPopup, setErrorPopup] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-<<<<<<< HEAD
-=======
-
->>>>>>> main
   useEffect(() => {
     const fetchInitialData = async () => {
       const token = localStorage.getItem("token");
@@ -115,28 +111,6 @@ const ReservasPage = () => {
         error.response?.data?.message || "Error al crear la reserva. Inténtalo nuevamente.";
       setErrorMessage(errorMsg);
       setErrorPopup(true);
-<<<<<<< HEAD
-=======
-    }
-  };
-
-  const confirmarEliminarReserva = (idReserva) => {
-    setReservaAEliminar(idReserva);
-    setShowEliminarPopup(true);
-  };
-
-  const handleEliminarReserva = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:5000/api/reservas/${reservaAEliminar}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      setHistorial(historial.filter((reserva) => reserva._id !== reservaAEliminar));
-      setShowEliminarPopup(false);
-    } catch (error) {
-      console.error("Error al eliminar la reserva:", error);
->>>>>>> main
     }
   };
   const confirmarEliminarReserva = (idReserva) => {
@@ -278,10 +252,6 @@ const ReservasPage = () => {
           </ul>
         </div>
       )}
-<<<<<<< HEAD
-=======
-
->>>>>>> main
       {showPopup && (
         <div className="popup-overlay">
           <div className="popup">
@@ -296,10 +266,6 @@ const ReservasPage = () => {
           </div>
         </div>
       )}
-<<<<<<< HEAD
-=======
-
->>>>>>> main
       {showEliminarPopup && (
         <div className="popup-overlay">
           <div className="popup">
@@ -314,10 +280,6 @@ const ReservasPage = () => {
           </div>
         </div>
       )}
-<<<<<<< HEAD
-=======
-
->>>>>>> main
       {errorPopup && (
         <div className="popup-overlay">
           <div className="popup">

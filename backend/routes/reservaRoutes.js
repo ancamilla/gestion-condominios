@@ -142,12 +142,6 @@ router.post("/", verificarUsuario, async (req, res) => {
 });
 
 
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> main
 // Ruta para obtener el historial de reservas del usuario autenticado
 router.get("/historial", verificarUsuario, async (req, res) => {
   try {

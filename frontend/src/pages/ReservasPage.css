@@ -284,13 +284,6 @@ button:active {
   font-weight: bold;
   margin-left: 10px;
 }
-<<<<<<< HEAD
 .eliminar-reserva:hover {
   text-decoration: underline;
 }
-=======
-
-.eliminar-reserva:hover {
-  text-decoration: underline;
-}
->>>>>>> main
