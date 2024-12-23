@@ -1,0 +1,64 @@
+/* Contenedor principal */
+.reclamo-container {
+    margin: 0 auto;
+    max-width: 800px;
+    padding: 20px;
+    background-color: #f9f9f9; /* Fondo claro */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Sombra */
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Título */
+  .reclamo-container h2 {
+    font-size: 24px;
+    color: #333; /* Texto oscuro */
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  /* Etiquetas */
+  .reclamo-container label {
+    display: block;
+    font-size: 14px;
+    color: #555; /* Texto medio oscuro */
+    margin-bottom: 5px;
+  }
+  
+  /* Campos de entrada */
+  .reclamo-container textarea,
+  .reclamo-container select {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc; /* Borde gris claro */
+    border-radius: 4px;
+    outline: none;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+  }
+  
+  /* Botón */
+  .reclamo-container button {
+    background-color: #007bff; /* Azul corporativo */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+  }
+  
+  .reclamo-container button:hover {
+    background-color: #0056b3; /* Azul más oscuro */
+  }
+  
+  /* Mensaje */
+  .reclamo-container p {
+    font-size: 14px;
+    color: red; /* Mensaje de error */
+    margin-top: 10px;
+  }
+  
