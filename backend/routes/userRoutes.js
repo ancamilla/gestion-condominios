@@ -30,10 +30,10 @@ router.put("/asignar-rol/:id", verificarUsuario, verificarRol(["administrador"])
 // Ruta para registrar un nuevo usuario
 router.post("/register", async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, address } = req.body;
 
     // Verificamos que todos los campos obligatorios estén presentes
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !address) {
       return res.status(400).json({ message: "Todos los campos son obligatorios" });
     }
 
@@ -44,7 +44,7 @@ router.post("/register", async (req, res) => {
     }
 
     // Creamos un nuevo usuario
-    const newUser = new User({ name, email, password, role });
+    const newUser = new User({ name, email, password, role, address });
     await newUser.save();
     res.status(201).json({ message: "Usuario registrado exitosamente" });
   } catch (error) {
@@ -74,15 +74,16 @@ router.post("/login", async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    res.json({ token, usuario: { name: usuario.name, email: usuario.email, role: usuario.role } });
+    res.json({ token, usuario: { name: usuario.name, email: usuario.email, role: usuario.role, address: usuario.address } });
   } catch (error) {
     res.status(500).json({ message: "Error al iniciar sesión", error });
   }
 });
+
 // Ruta para obtener el perfil del usuario autenticado
 router.get("/profile", verificarUsuario, async (req, res) => {
   try {
-    const usuario = await User.findById(req.usuario._id, "name email role");
+    const usuario = await User.findById(req.usuario._id, "name email role address");
     if (!usuario) {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
@@ -92,15 +93,55 @@ router.get("/profile", verificarUsuario, async (req, res) => {
   }
 });
 
+// Ruta para actualizar el perfil del usuario autenticado
+router.put("/profile", verificarUsuario, async (req, res) => {
+  try {
+    const { name, email, address } = req.body;
+    const usuario = await User.findById(req.usuario._id);
+    if (!usuario) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    // Actualizamos los campos del usuario
+    usuario.name = name || usuario.name;
+    usuario.email = email || usuario.email;
+    usuario.address = address || usuario.address;
+
+    await usuario.save();
+    res.json({ message: "Perfil actualizado correctamente", usuario });
+  } catch (error) {
+    res.status(500).json({ message: "Error al actualizar el perfil", error });
+  }
+});
 
 // Ruta para obtener todos los usuarios (solo para pruebas)
 router.get("/", async (req, res) => {
   try {
-    const users = await User.find();
+    const users = await User.find({}, "name email role address");
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: "Error al obtener usuarios", error });
   }
 });
+// Ruta para que el administrador edite usuarios
+router.put("/:id", verificarUsuario, verificarRol(["administrador"]), async (req, res) => {
+  try {
+    const { name, email, address } = req.body;
+    const usuario = await User.findById(req.params.id);
+    if (!usuario) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    usuario.name = name || usuario.name;
+    usuario.email = email || usuario.email;
+    usuario.address = address || usuario.address;
+
+    await usuario.save();
+    res.json({ message: "Usuario actualizado exitosamente", usuario });
+  } catch (error) {
+    res.status(500).json({ message: "Error al actualizar el usuario", error });
+  }
+});
 
 module.exports = router;
+

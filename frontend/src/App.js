@@ -10,8 +10,11 @@ import ConfigurarGastosComunes from "./pages/configurarGastosComunes";
 import HistorialGastos from "./pages/HistorialGastos";
 import DocumentacionPage from "./pages/DocumentacionPage";
 import EditarDocumentacionPage from "./pages/EditarDocumentacionPage";
-import RegistrarReclamo from "./pages/RegistrarReclamo"; // Nueva página
-import GestionarReclamos from "./pages/GestionarReclamos"; // Nueva página
+import RegistrarReclamo from "./pages/RegistrarReclamo"; 
+import GestionarReclamos from "./pages/GestionarReclamos"; 
+import GestionarCuentas from "./pages/GestionarCuentas";
+import GestionarGastos from "./pages/GestionarGastos";
+import EditarUsuarios from "./pages/EditarUsuarios";
 
 function App() {
   return (
@@ -31,6 +34,9 @@ function App() {
         <Route path="/documentacion/editar" element={<EditarDocumentacionPage />} />
         <Route path="/reclamos" element={<RegistrarReclamo />} />
         <Route path="/admin/reclamos" element={<GestionarReclamos />} />
+        <Route path="/admin/cuentas" element={<GestionarCuentas />} />
+        <Route path="/admin/editar-usuarios" element={<EditarUsuarios />} />
+        <Route path="/admin/gastos" element={<GestionarGastos />} />
       </Routes>
     </Router>
   );

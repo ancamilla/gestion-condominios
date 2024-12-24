@@ -3,10 +3,27 @@ import axios from "axios";
 import TopBar from "./TopBar";
 import "./DocumentacionPage.css";
 
-const DocumentacionPage = ({ role }) => {
-  const [documentos, setDocumentos] = useState([]);
-  const [archivo, setArchivo] = useState(null);
-  const [nombre, setNombre] = useState("");
+const DocumentacionPage = () => {
+  const [documentos, setDocumentos] = useState([]); // Lista de documentos
+  const [archivo, setArchivo] = useState(null); // Archivo a subir
+  const [nombre, setNombre] = useState(""); // Nombre del archivo
+  const [user, setUser] = useState(null); // Usuario autenticado
+
+  // Obtener datos del usuario autenticado
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/users/profile", {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
+        setUser(response.data);
+      } catch (error) {
+        console.error("Error al cargar el usuario:", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   // Obtener documentos
   useEffect(() => {
@@ -50,14 +67,20 @@ const DocumentacionPage = ({ role }) => {
     }
   };
 
+  if (!user) return null; // No renderizar hasta que se cargue el usuario
+
   return (
     <div className="documentacion-container">
-      <TopBar role={role} />
+      <TopBar userName={user.name} role={user.role} />
 
       <h2>Documentación del Reglamento</h2>
-      {role === "administrador" && (
+      {user.role === "administrador" && (
         <div className="subir-documento">
-          <input type="text" placeholder="Nombre del documento" onChange={(e) => setNombre(e.target.value)} />
+          <input
+            type="text"
+            placeholder="Nombre del documento"
+            onChange={(e) => setNombre(e.target.value)}
+          />
           <input type="file" onChange={(e) => setArchivo(e.target.files[0])} />
           <button onClick={handleSubirDocumento}>Subir Documento</button>
         </div>
@@ -69,7 +92,7 @@ const DocumentacionPage = ({ role }) => {
             <a href={`http://localhost:5000${doc.archivoUrl}`} target="_blank" rel="noopener noreferrer">
               {doc.nombre}
             </a>
-            {role === "administrador" && (
+            {user.role === "administrador" && (
               <button onClick={() => handleEliminarDocumento(doc._id)}>Eliminar</button>
             )}
           </li>
