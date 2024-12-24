@@ -1,11 +1,29 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./EditarDocumentacionPage.css";
+import TopBar from "./TopBar"; // Importa TopBar
 
 const EditarDocumentacionPage = () => {
   const [documentos, setDocumentos] = useState([]); // Lista de documentos
   const [nombre, setNombre] = useState(""); // Nombre del documento
   const [archivo, setArchivo] = useState(null); // Archivo a subir
+  const [user, setUser] = useState(null); // Usuario autenticado
+
+  // Obtener datos del usuario autenticado
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/users/profile", {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
+        setUser(response.data);
+      } catch (error) {
+        console.error("Error al cargar los datos del usuario autenticado:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   // Obtener documentos existentes
   useEffect(() => {
@@ -57,8 +75,11 @@ const EditarDocumentacionPage = () => {
     }
   };
 
+  if (!user) return null; // Si no hay usuario autenticado, no renderizar nada
+
   return (
     <div className="editar-documentacion-container">
+      <TopBar userName={user.name} role={user.role} />
       <h2>Gestión de Documentación</h2>
 
       {/* Formulario para subir un nuevo documento */}
