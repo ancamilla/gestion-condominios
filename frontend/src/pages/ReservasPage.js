@@ -92,9 +92,9 @@ const ReservasPage = () => {
         setMessage("Por favor, selecciona una hora de inicio.");
         return;
       }
-
+  
       const token = localStorage.getItem("token");
-      const response = await axios.post(
+      const reservaResponse = await axios.post(
         "http://localhost:5000/api/reservas",
         {
           espacio: espacioSeleccionado,
@@ -102,17 +102,30 @@ const ReservasPage = () => {
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-
-      setReservas([...reservas, response.data.reserva]);
-      setMessage("Reserva creada exitosamente.");
+  
+      const gastoResponse = await axios.post(
+        `http://localhost:5000/api/cuentas/${user._id}/adicionales`,
+        {
+          tipo: "arriendo",
+          monto: 40000,
+          descripcion: `Arriendo de ${espacios.find((espacio) => espacio._id === espacioSeleccionado)?.nombre}`,
+          fecha: new Date().toISOString(),
+          estado: "pendiente",
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+  
+      setReservas([...reservas, reservaResponse.data.reserva]);
+      setMessage("Reserva creada exitosamente. Se ha añadido un gasto de $40,000 a tu cuenta.");
       setShowPopup(false);
     } catch (error) {
       const errorMsg =
-        error.response?.data?.message || "Error al crear la reserva. Inténtalo nuevamente.";
+        error.response?.data?.message || "Error al crear la reserva o agregar el gasto. Inténtalo nuevamente.";
       setErrorMessage(errorMsg);
       setErrorPopup(true);
     }
   };
+  
   const confirmarEliminarReserva = (idReserva) => {
     setReservaAEliminar(idReserva);
     setShowEliminarPopup(true);

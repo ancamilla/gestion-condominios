@@ -1,3 +1,11 @@
+.app-container {
+  padding-bottom: 60px; /* Espacio para el footer */
+  min-height: 100vh; /* Altura mínima para evitar que el footer suba */
+  display: flex;
+  flex-direction: column;
+}
+
+
 .App {
   text-align: center;
 }

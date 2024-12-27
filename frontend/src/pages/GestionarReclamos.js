@@ -88,6 +88,25 @@ const GestionarReclamos = () => {
               <p><strong>Estado:</strong> {reclamo.estado}</p>
               <p><strong>Categoría:</strong> {reclamo.categoria}</p>
               <p><strong>Fecha:</strong> {new Date(reclamo.fecha).toLocaleDateString()}</p>
+
+              {reclamo.multimedia && reclamo.multimedia.length > 0 && (
+                <div>
+                  <strong>Archivos adjuntos:</strong>
+                  <ul>
+                    {reclamo.multimedia.map((archivo, index) => (
+                      <li key={index}>
+                        <a
+                          href={`http://localhost:5000${archivo}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Ver archivo {index + 1}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
             <div className="reclamo-actions">
               {reclamo.estado === "pendiente" && (
@@ -134,3 +153,4 @@ const GestionarReclamos = () => {
 };
 
 export default GestionarReclamos;
+

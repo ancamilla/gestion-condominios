@@ -38,12 +38,18 @@ const GestionarGastos = () => {
         const response = await axios.get("http://localhost:5000/api/cuentas/admin/cuentas", {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
-        setResidentes(response.data);
+  
+        // Ordenar residentes por dirección (domicilio) en el frontend
+        const residentesOrdenados = response.data.sort((a, b) =>
+          a.usuarioId.address.localeCompare(b.usuarioId.address)
+        );
+  
+        setResidentes(residentesOrdenados);
       } catch (error) {
         console.error("Error al cargar residentes:", error);
       }
     };
-
+  
     const fetchConfiguracion = async () => {
       try {
         const response = await axios.get(
@@ -58,10 +64,11 @@ const GestionarGastos = () => {
         console.error("Error al cargar configuración:", error);
       }
     };
-
+  
     fetchResidentes();
     fetchConfiguracion();
   }, []);
+  
 
   // Paginación: calcular resultados visibles
   const indexOfLastResult = currentPage * resultsPerPage;
@@ -103,7 +110,7 @@ const GestionarGastos = () => {
   // Guardar configuración de gastos comunes
   const handleGuardarConfiguracion = async () => {
     try {
-      await axios.post(
+      await axios.get(
         "http://localhost:5000/api/cuentas/admin/configuracion-gastos-comunes",
         { monto, diaCobro },
         {

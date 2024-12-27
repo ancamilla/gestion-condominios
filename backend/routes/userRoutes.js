@@ -4,7 +4,7 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { verificarUsuario, verificarRol } = require("../middlewares/auth");
-
+const Cuenta = require("../models/Cuenta");
 // Ruta para asignar roles (solo para administradores)
 router.put("/asignar-rol/:id", verificarUsuario, verificarRol(["administrador"]), async (req, res) => {
   const { role } = req.body;
@@ -32,25 +32,36 @@ router.post("/register", async (req, res) => {
   try {
     const { name, email, password, role, address } = req.body;
 
-    // Verificamos que todos los campos obligatorios estén presentes
     if (!name || !email || !password || !address) {
-      return res.status(400).json({ message: "Todos los campos son obligatorios" });
+      return res.status(400).json({ message: "Todos los campos son obligatorios." });
     }
 
-    // Verificamos si el usuario ya existe
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: "El email ya está registrado" });
+      return res.status(400).json({ message: "El email ya está registrado." });
     }
 
-    // Creamos un nuevo usuario
+    // Crear usuario
     const newUser = new User({ name, email, password, role, address });
     await newUser.save();
-    res.status(201).json({ message: "Usuario registrado exitosamente" });
+
+    // Crear cuenta asociada
+    const newCuenta = new Cuenta({
+      usuarioId: newUser._id,
+      gastosComunes: [],
+      adicionales: [],
+    });
+    await newCuenta.save();
+
+    // Respuesta exitosa
+    return res.status(201).json({ message: "Usuario registrado y cuenta creada exitosamente." });
   } catch (error) {
-    res.status(500).json({ message: "Error al registrar usuario", error });
+    // Manejar error inesperado
+    console.error("Error inesperado al registrar usuario:", error);
+    return res.status(500).json({ message: "Error al registrar usuario.", error: error.message });
   }
 });
+
 
 // Ruta para iniciar sesión
 router.post("/login", async (req, res) => {
@@ -114,10 +125,10 @@ router.put("/profile", verificarUsuario, async (req, res) => {
   }
 });
 
-// Ruta para obtener todos los usuarios (solo para pruebas)
+// Ruta para obtener todos los usuarios (solo para administradores)
 router.get("/", async (req, res) => {
   try {
-    const users = await User.find({}, "name email role address");
+    const users = await User.find().sort({ address: 1 });;
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: "Error al obtener usuarios", error });

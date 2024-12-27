@@ -2,15 +2,33 @@ const express = require("express");
 const router = express.Router();
 const Reclamo = require("../models/Reclamo");
 const { verificarUsuario } = require("../middlewares/auth");
+const multer = require("multer");
 
-// Registrar un nuevo reclamo
-router.post("/", verificarUsuario, async (req, res) => {
+
+
+// Configuración de almacenamiento para multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/"); // Carpeta donde se almacenarán los archivos
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, `${uniqueSuffix}-${file.originalname}`);
+  },
+});
+
+const upload = multer({ storage });
+
+// Registrar un nuevo reclamo con archivos multimedia
+router.post("/", verificarUsuario, upload.array("multimedia", 5), async (req, res) => {
   try {
-    const { descripcion, categoria, multimedia } = req.body;
+    const { descripcion, categoria } = req.body;
 
     if (!descripcion || !categoria) {
       return res.status(400).json({ message: "La descripción y la categoría son obligatorias" });
     }
+
+    const multimedia = req.files.map((file) => `/uploads/${file.filename}`); // Guardar URLs de archivos
 
     const nuevoReclamo = new Reclamo({
       usuario: req.usuario._id,
